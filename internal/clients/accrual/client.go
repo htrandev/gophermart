@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"net/url"
 	"path"
 
 	"github.com/go-resty/resty/v2"
@@ -84,9 +83,5 @@ func (c *Client) GetAccrual(ctx context.Context, number string) (domain.Accrual,
 }
 
 func (c *Client) buildURL(number string) string {
-	u := url.URL{
-		Host: c.opts.Addr,
-		Path: path.Join("api", "orders", number),
-	}
-	return u.String()
+	return c.opts.Addr + path.Join("api", "orders", number)
 }
