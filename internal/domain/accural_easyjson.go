@@ -47,7 +47,7 @@ func easyjsonE06680f3DecodeGithubComHtrandevGophermartInternalDomain(in *jlexer.
 			if in.IsNull() {
 				in.Skip()
 			} else {
-				out.Accrual = int(in.Int())
+				out.Accrual = float64(in.Float64())
 			}
 		default:
 			in.SkipRecursive()
@@ -76,7 +76,7 @@ func easyjsonE06680f3EncodeGithubComHtrandevGophermartInternalDomain(out *jwrite
 	{
 		const prefix string = ",\"accrual\":"
 		out.RawString(prefix)
-		out.Int(int(in.Accrual))
+		out.Float64(float64(in.Accrual))
 	}
 	out.RawByte('}')
 }

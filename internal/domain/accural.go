@@ -17,5 +17,5 @@ func (a AccrualStatus) String() string {
 type Accrual struct {
 	Order   string        `json:"order"`
 	Status  AccrualStatus `json:"status"`
-	Accrual int           `json:"accrual"`
+	Accrual float64       `json:"accrual"`
 }
