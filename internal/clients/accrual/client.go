@@ -83,5 +83,5 @@ func (c *Client) GetAccrual(ctx context.Context, number string) (domain.Accrual,
 }
 
 func (c *Client) buildURL(number string) string {
-	return c.opts.Addr + path.Join("api", "orders", number)
+	return c.opts.Addr + "/" + path.Join("api", "orders", number)
 }
