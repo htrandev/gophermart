@@ -54,10 +54,10 @@ func New(auth Authorizer, handler *handler.Handler, l *zap.Logger) (*chi.Mux, er
 			middleware.Compress(),
 		).Post("/balance/withdraw", handler.Withdraw)
 		r.With(
-			middleware.MethodChecker(http.MethodPost),
+			middleware.MethodChecker(http.MethodGet),
 			authMiddleware.Authorize(),
 			middleware.Compress(),
-		).Post("/withdrawals", handler.Withdrawals)
+		).Get("/withdrawals", handler.Withdrawals)
 	})
 	return r, nil
 }
