@@ -41,7 +41,7 @@ func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication(in *jl
 			if in.IsNull() {
 				in.Skip()
 			} else {
-				out.Sum = int(in.Int())
+				out.Sum = float64(in.Float64())
 			}
 		default:
 			in.SkipRecursive()
@@ -65,7 +65,7 @@ func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication(out *j
 	{
 		const prefix string = ",\"sum\":"
 		out.RawString(prefix)
-		out.Int(int(in.Sum))
+		out.Float64(float64(in.Sum))
 	}
 	out.RawByte('}')
 }

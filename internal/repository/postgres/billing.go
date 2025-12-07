@@ -41,7 +41,7 @@ func (r *Repository) Withdraw(ctx context.Context, withdraw domain.WithdrawReque
 	}
 
 	getUserBalanceQuery := `SELECT current_balance FROM users WHERE id = $1;`
-	var balance int
+	var balance float64
 	if err := tx.QueryRowContext(ctx, getUserBalanceQuery, withdraw.UserID).Scan(&balance); err != nil {
 		return fmt.Errorf("repository/withdraw: get user balance: %w", err)
 	}

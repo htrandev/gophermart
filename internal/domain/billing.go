@@ -9,12 +9,12 @@ import (
 type WithdrawRequest struct {
 	UserID uuid.UUID
 	Order  string
-	Sum    int
+	Sum    float64
 }
 
 type Withdraw struct {
 	Order     string    `json:"order"`
-	Sum       int       `json:"sum"`
+	Sum       float64   `json:"sum"`
 	CreatedAt time.Time `json:"processed_at"`
 }
 

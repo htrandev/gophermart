@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS users(
 	login text UNIQUE NOT NULL,
 	password text NOT NULL,
 	created_at timestamp DEFAULT now(),
-	current_balance int DEFAULT 0,
-	withdrawn int DEFAULT 0
+	current_balance real DEFAULT 0,
+	withdrawn real DEFAULT 0
 );
 
 CREATE INDEX ON users (login); 
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS orders(
 	status order_status DEFAULT 'NEW',
 	created_at timestamp DEFAULT now(),
 	updated_at timestamp,
-	accrual int NOT NULL DEFAULT 0,
+	accrual real NOT NULL DEFAULT 0,
 	user_id uuid NOT NULL references users(id) ON DELETE CASCADE 
 );
 
@@ -28,7 +28,7 @@ CREATE INDEX ON orders (number);
 CREATE TABLE IF NOT EXISTS withdrawals(
 	id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	order_number text NOT NULL,
-	sum int NOT NULL DEFAULT 0,
+	sum real NOT NULL DEFAULT 0,
 	created_at timestamp DEFAULT now(),
 	user_id uuid NOT NULL references users(id) ON DELETE CASCADE
 )

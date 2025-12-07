@@ -119,7 +119,7 @@ func easyjson6f9638c7DecodeGithubComHtrandevGophermartInternalDomain1(in *jlexer
 			if in.IsNull() {
 				in.Skip()
 			} else {
-				out.Sum = int(in.Int())
+				out.Sum = float64(in.Float64())
 			}
 		default:
 			in.SkipRecursive()
@@ -148,7 +148,7 @@ func easyjson6f9638c7EncodeGithubComHtrandevGophermartInternalDomain1(out *jwrit
 	{
 		const prefix string = ",\"Sum\":"
 		out.RawString(prefix)
-		out.Int(int(in.Sum))
+		out.Float64(float64(in.Sum))
 	}
 	out.RawByte('}')
 }
@@ -200,7 +200,7 @@ func easyjson6f9638c7DecodeGithubComHtrandevGophermartInternalDomain2(in *jlexer
 			if in.IsNull() {
 				in.Skip()
 			} else {
-				out.Sum = int(in.Int())
+				out.Sum = float64(in.Float64())
 			}
 		case "processed_at":
 			if in.IsNull() {
@@ -232,7 +232,7 @@ func easyjson6f9638c7EncodeGithubComHtrandevGophermartInternalDomain2(out *jwrit
 	{
 		const prefix string = ",\"sum\":"
 		out.RawString(prefix)
-		out.Int(int(in.Sum))
+		out.Float64(float64(in.Sum))
 	}
 	{
 		const prefix string = ",\"processed_at\":"

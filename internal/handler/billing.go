@@ -83,7 +83,7 @@ func (h *Handler) Withdraw(rw http.ResponseWriter, r *http.Request) {
 
 	if err := h.opts.Service.Withdraw(ctx, f.Req); err != nil {
 		if errors.Is(err, domain.ErrNotEnoughPoints) {
-			h.opts.Logger.Error("not enought points", zap.Int("needs", f.Req.Sum), method, zap.Error(err))
+			h.opts.Logger.Error("not enought points", zap.Float64("needs", f.Req.Sum), method, zap.Error(err))
 			rw.WriteHeader(http.StatusPaymentRequired)
 			return
 		}
