@@ -23,40 +23,40 @@ func New(auth Authorizer, handler *handler.Handler, l *zap.Logger) (*chi.Mux, er
 		// авторизация
 		r.With(
 			middleware.MethodChecker(http.MethodPost),
-			// middleware.Compress(),
+			middleware.Compress(),
 		).Post("/register", handler.Register)
 		r.With(
 			middleware.MethodChecker(http.MethodPost),
-			// middleware.Compress(),
+			middleware.Compress(),
 		).Post("/login", handler.Login)
 
 		// заказы
 		r.With(
 			middleware.MethodChecker(http.MethodPost),
 			authMiddleware.Authorize(),
-			// middleware.Compress(),
+			middleware.Compress(),
 		).Post("/orders", handler.AddOrder)
 		r.With(
 			middleware.MethodChecker(http.MethodGet),
 			authMiddleware.Authorize(),
-			// middleware.Compress(),
+			middleware.Compress(),
 		).Get("/orders", handler.GetOrders)
 
 		// баланс
 		r.With(
 			middleware.MethodChecker(http.MethodGet),
 			authMiddleware.Authorize(),
-			// middleware.Compress(),
+			middleware.Compress(),
 		).Get("/balance", handler.GetBalance)
 		r.With(
 			middleware.MethodChecker(http.MethodPost),
 			authMiddleware.Authorize(),
-			// middleware.Compress(),
+			middleware.Compress(),
 		).Post("/balance/withdraw", handler.Withdraw)
 		r.With(
 			middleware.MethodChecker(http.MethodGet),
 			authMiddleware.Authorize(),
-			// middleware.Compress(),
+			middleware.Compress(),
 		).Get("/withdrawals", handler.Withdrawals)
 	})
 	return r, nil
