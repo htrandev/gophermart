@@ -85,9 +85,8 @@ func (c *Client) GetAccrual(ctx context.Context, number string) (domain.Accrual,
 
 func (c *Client) buildURL(number string) string {
 	u := url.URL{
-		Scheme: "http",
-		Host:   c.opts.Addr,
-		Path:   path.Join("api", "orders", number),
+		Host: c.opts.Addr,
+		Path: path.Join("api", "orders", number),
 	}
 	return u.String()
 }
