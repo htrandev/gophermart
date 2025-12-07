@@ -3,7 +3,6 @@ package postgres
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -30,15 +29,6 @@ func (r *Repository) Withdraw(ctx context.Context, withdraw domain.WithdrawReque
 		return fmt.Errorf("repository/withdraw: begin transaction: %w", err)
 	}
 	defer tx.Rollback()
-
-	chechOrderQuery := `SELECT id FROM orders WHERE number = $1;`
-	var orderID uuid.UUID
-	if err := tx.QueryRowContext(ctx, chechOrderQuery, withdraw.Order).Scan(&orderID); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return domain.ErrNotFound
-		}
-		return fmt.Errorf("repository/withdraw: check order existence: %w", err)
-	}
 
 	getUserBalanceQuery := `SELECT current_balance FROM users WHERE id = $1;`
 	var balance float64

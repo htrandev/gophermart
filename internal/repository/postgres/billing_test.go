@@ -87,11 +87,6 @@ func (s *BillingSuite) TestWithdraw() {
 		s.Require().NoError(err)
 	})
 
-	s.Run("unknown order", func() {
-		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserID: userID, Order: "unknown order", Sum: 100})
-		s.Require().ErrorIs(err, domain.ErrNotFound)
-	})
-
 	s.Run("unknown user", func() {
 		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserID: uuid.New(), Order: order.Number, Sum: 100})
 		s.Require().ErrorIs(err, sql.ErrNoRows)
