@@ -37,7 +37,7 @@ func (a *Auth) Authorize() func(next http.Handler) http.Handler {
 			id, err := a.auth.GetIDFromToken(token)
 			if err != nil {
 				a.logger.Error("cant get id from token", zap.Error(err))
-				w.WriteHeader(http.StatusInternalServerError)
+				w.WriteHeader(http.StatusUnauthorized)
 				return
 			}
 

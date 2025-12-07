@@ -64,7 +64,7 @@ func (s *AutorizerSuite) TestAuthorize() {
 		wrapper := s.auth.Authorize()
 		wrapper(dummyHandler).ServeHTTP(rec, req)
 
-		s.Require().Equal(http.StatusInternalServerError, rec.Code)
+		s.Require().Equal(http.StatusUnauthorized, rec.Code)
 	})
 
 	s.Run("invalid user id", func() {
