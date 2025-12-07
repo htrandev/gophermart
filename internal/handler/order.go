@@ -105,7 +105,18 @@ func (h *Handler) GetOrders(rw http.ResponseWriter, r *http.Request) {
 }
 
 func buildOrdersResponse(orders domain.Orders) ([]byte, error) {
-	p, err := easyjson.Marshal(orders)
+	response := make(application.OrdersResponse, 0, len(orders))
+
+	for _, order := range orders {
+		response = append(response, application.Order{
+			Number:    order.Number,
+			Status:    order.Status.String(),
+			Accrual:   order.Accrual,
+			CreatedAt: order.CreatedAt,
+		})
+	}
+
+	p, err := easyjson.Marshal(response)
 	if err != nil {
 		return nil, fmt.Errorf("buildManyBody: can't marshal metrics: %w", err)
 	}
