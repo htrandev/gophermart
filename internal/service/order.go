@@ -19,8 +19,8 @@ func (s *Service) AddOrder(ctx context.Context, order domain.Order) error {
 	return nil
 }
 
-func (s *Service) GetOrders(ctx context.Context, userId uuid.UUID) ([]domain.Order, error) {
-	orders, err := s.opts.Repository.GetOrders(ctx, userId)
+func (s *Service) GetOrders(ctx context.Context, userID uuid.UUID) ([]domain.Order, error) {
+	orders, err := s.opts.Repository.GetOrders(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("service: create order: %w", err)
 	}

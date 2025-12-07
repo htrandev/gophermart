@@ -66,7 +66,7 @@ func (s *BillingSuite) TestGetBalance() {
 func (s *BillingSuite) TestWithdraw() {
 	ctx := context.Background()
 
-	withdraw := domain.WithdrawRequest{UserId: uuid.New(), Order: "test_1", Sum: 3}
+	withdraw := domain.WithdrawRequest{UserID: uuid.New(), Order: "test_1", Sum: 3}
 
 	s.Run("valid", func() {
 		s.repository.EXPECT().Withdraw(gomock.Any(), withdraw).Return(nil).Times(1)
@@ -86,7 +86,7 @@ func (s *BillingSuite) TestWithdraw() {
 func (s *BillingSuite) TestGetWithdrawals() {
 	ctx := context.Background()
 
-	userId := uuid.New()
+	userID := uuid.New()
 	withdraws := []domain.Withdraw{
 		{Order: "test_1", Sum: 1},
 		{Order: "test_2", Sum: 2},
@@ -94,17 +94,17 @@ func (s *BillingSuite) TestGetWithdrawals() {
 	}
 
 	s.Run("valid", func() {
-		s.repository.EXPECT().GetWithdrawals(gomock.Any(), userId).Return(withdraws, nil).Times(1)
+		s.repository.EXPECT().GetWithdrawals(gomock.Any(), userID).Return(withdraws, nil).Times(1)
 
-		w, err := s.service.GetWithdrawals(ctx, userId)
+		w, err := s.service.GetWithdrawals(ctx, userID)
 		s.Require().NoError(err)
 		s.Require().Equal(withdraws, w)
 	})
 
 	s.Run("repository error", func() {
-		s.repository.EXPECT().GetWithdrawals(gomock.Any(), userId).Return(nil, errTest).Times(1)
+		s.repository.EXPECT().GetWithdrawals(gomock.Any(), userID).Return(nil, errTest).Times(1)
 
-		w, err := s.service.GetWithdrawals(ctx, userId)
+		w, err := s.service.GetWithdrawals(ctx, userID)
 		s.Require().ErrorIs(err, errTest)
 		s.Require().Nil(w)
 	})

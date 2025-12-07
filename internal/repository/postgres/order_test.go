@@ -45,21 +45,21 @@ func (s *OrderSuite) TestCreateOrder() {
 
 	id, err := s.repository.Register(ctx, user)
 	s.Require().NoError(err)
-	userId, err := uuid.Parse(id)
+	userID, err := uuid.Parse(id)
 	s.Require().NoError(err)
 
 	s.Run("valid", func() {
-		err = s.repository.CreateOrder(ctx, domain.Order{Number: number, UserId: userId})
+		err = s.repository.CreateOrder(ctx, domain.Order{Number: number, UserID: userID})
 		s.Require().NoError(err)
 	})
 
 	s.Run("order already exists", func() {
-		err = s.repository.CreateOrder(ctx, domain.Order{Number: number, UserId: userId})
+		err = s.repository.CreateOrder(ctx, domain.Order{Number: number, UserID: userID})
 		s.Require().ErrorIs(err, domain.ErrOrderAlreadyAddToUser)
 	})
 
 	s.Run("order add to another user", func() {
-		err = s.repository.CreateOrder(ctx, domain.Order{Number: number, UserId: uuid.New()})
+		err = s.repository.CreateOrder(ctx, domain.Order{Number: number, UserID: uuid.New()})
 		s.Require().ErrorIs(err, domain.ErrOrderCreatedByAnotherUser)
 	})
 }
@@ -74,27 +74,27 @@ func (s *OrderSuite) TestGetOrders() {
 
 	id, err := s.repository.Register(ctx, user)
 	s.Require().NoError(err)
-	userId, err := uuid.Parse(id)
+	userID, err := uuid.Parse(id)
 	s.Require().NoError(err)
 
-	err = s.repository.CreateOrder(ctx, domain.Order{Number: "number_1", UserId: userId})
+	err = s.repository.CreateOrder(ctx, domain.Order{Number: "number_1", UserID: userID})
 	s.Require().NoError(err)
-	err = s.repository.CreateOrder(ctx, domain.Order{Number: "number_2", UserId: userId})
+	err = s.repository.CreateOrder(ctx, domain.Order{Number: "number_2", UserID: userID})
 	s.Require().NoError(err)
-	err = s.repository.CreateOrder(ctx, domain.Order{Number: "number_3", UserId: userId})
+	err = s.repository.CreateOrder(ctx, domain.Order{Number: "number_3", UserID: userID})
 	s.Require().NoError(err)
 
 	s.Run("valid", func() {
-		o, err := s.repository.GetOrders(ctx, userId)
+		o, err := s.repository.GetOrders(ctx, userID)
 		s.Require().NoError(err)
 		s.Require().Len(o, 3)
 
 		s.Require().Equal("number_3", o[0].Number)
-		s.Require().Equal(userId, o[0].UserId)
+		s.Require().Equal(userID, o[0].UserID)
 		s.Require().Equal("number_2", o[1].Number)
-		s.Require().Equal(userId, o[1].UserId)
+		s.Require().Equal(userID, o[1].UserID)
 		s.Require().Equal("number_1", o[2].Number)
-		s.Require().Equal(userId, o[2].UserId)
+		s.Require().Equal(userID, o[2].UserID)
 	})
 
 	s.Run("no orders", func() {
@@ -114,12 +114,12 @@ func (s *OrderSuite) TestUpdateOrder() {
 
 	id, err := s.repository.Register(ctx, user)
 	s.Require().NoError(err)
-	userId, err := uuid.Parse(id)
+	userID, err := uuid.Parse(id)
 	s.Require().NoError(err)
 
 	s.Run("order processed", func() {
 
-		order := domain.Order{Number: "number_1", UserId: userId}
+		order := domain.Order{Number: "number_1", UserID: userID}
 
 		err = s.repository.CreateOrder(ctx, order)
 		s.Require().NoError(err)
@@ -130,7 +130,7 @@ func (s *OrderSuite) TestUpdateOrder() {
 	})
 
 	s.Run("order processing", func() {
-		order := domain.Order{Number: "number_2", UserId: userId}
+		order := domain.Order{Number: "number_2", UserID: userID}
 
 		err = s.repository.CreateOrder(ctx, order)
 		s.Require().NoError(err)

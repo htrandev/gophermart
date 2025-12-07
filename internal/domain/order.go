@@ -45,22 +45,22 @@ func (o OrderStatus) String() string {
 }
 
 type Order struct {
-	Id          uuid.UUID
+	ID          uuid.UUID
 	Number      string      `json:"number"`
 	Status      OrderStatus `json:"status"`
 	Accrual     float64     `json:"accrual"`
 	CreatedAt   time.Time   `json:"uploaded_at"`
 	ProcessedAt time.Time
-	UserId      uuid.UUID
+	UserID      uuid.UUID
 }
 
 func (o Order) IsEqual(v Order) bool {
-	return o.Id == v.Id &&
+	return o.ID == v.ID &&
 		o.Number == v.Number &&
 		o.Status == v.Status &&
 		o.Accrual == v.Accrual &&
 		o.CreatedAt.Equal(v.CreatedAt) &&
-		o.UserId == v.UserId
+		o.UserID == v.UserID
 }
 
 func (o Order) IsEmpty() bool {

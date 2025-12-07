@@ -45,11 +45,11 @@ func (s *BillingSuite) TestGetBalance() {
 
 	id, err := s.repository.Register(ctx, user)
 	s.Require().NoError(err)
-	userId, err := uuid.Parse(id)
+	userID, err := uuid.Parse(id)
 	s.Require().NoError(err)
 
 	s.Run("valid", func() {
-		b, err := s.repository.GetBalance(ctx, userId)
+		b, err := s.repository.GetBalance(ctx, userID)
 		s.Require().NoError(err)
 		s.Require().Equal(domain.Balance{}, b)
 	})
@@ -58,7 +58,7 @@ func (s *BillingSuite) TestGetBalance() {
 		newCtx, cancel := context.WithCancel(ctx)
 		cancel()
 
-		_, err := s.repository.GetBalance(newCtx, userId)
+		_, err := s.repository.GetBalance(newCtx, userID)
 		s.Require().Error(err)
 
 	})
@@ -67,38 +67,38 @@ func (s *BillingSuite) TestGetBalance() {
 func (s *BillingSuite) TestWithdraw() {
 	ctx := context.Background()
 
-	orderId := uuid.New()
+	orderID := uuid.New()
 	order := domain.Order{
-		Id:     orderId,
+		ID:     orderID,
 		Number: "test",
 	}
 
-	var userId uuid.UUID
+	var userID uuid.UUID
 	addUserQuery := `INSERT INTO users (login, password, current_balance) VALUES ('test', 'password', 1000) RETURNING id;`
-	err := s.db.QueryRowContext(ctx, addUserQuery).Scan(&userId)
+	err := s.db.QueryRowContext(ctx, addUserQuery).Scan(&userID)
 	s.Require().NoError(err)
 
 	addOrderQuery := `INSERT INTO orders (id, number, user_id) VALUES ($1, $2, $3);`
-	_, err = s.db.ExecContext(ctx, addOrderQuery, order.Id, order.Number, userId)
+	_, err = s.db.ExecContext(ctx, addOrderQuery, order.ID, order.Number, userID)
 	s.Require().NoError(err)
 
 	s.Run("valid", func() {
-		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserId: userId, Order: order.Number, Sum: 100})
+		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserID: userID, Order: order.Number, Sum: 100})
 		s.Require().NoError(err)
 	})
 
 	s.Run("unknown order", func() {
-		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserId: userId, Order: "unknown order", Sum: 100})
+		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserID: userID, Order: "unknown order", Sum: 100})
 		s.Require().ErrorIs(err, domain.ErrNotFound)
 	})
 
 	s.Run("unknown user", func() {
-		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserId: uuid.New(), Order: order.Number, Sum: 100})
+		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserID: uuid.New(), Order: order.Number, Sum: 100})
 		s.Require().ErrorIs(err, sql.ErrNoRows)
 	})
 
 	s.Run("not enough points", func() {
-		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserId: userId, Order: order.Number, Sum: 100000})
+		err := s.repository.Withdraw(ctx, domain.WithdrawRequest{UserID: userID, Order: order.Number, Sum: 100000})
 		s.Require().ErrorIs(err, domain.ErrNotEnoughPoints)
 	})
 }
@@ -106,15 +106,15 @@ func (s *BillingSuite) TestWithdraw() {
 func (s *BillingSuite) TestGetWithdrawals() {
 	ctx := context.Background()
 
-	var userId uuid.UUID
+	var userID uuid.UUID
 	addUserQuery := `INSERT INTO users (login, password, current_balance) VALUES ('test', 'password', 1000) RETURNING id;`
-	err := s.db.QueryRowContext(ctx, addUserQuery).Scan(&userId)
+	err := s.db.QueryRowContext(ctx, addUserQuery).Scan(&userID)
 	s.Require().NoError(err)
 
 	withdraws := []domain.WithdrawRequest{
-		{UserId: userId, Order: "test_1", Sum: 1},
-		{UserId: userId, Order: "test_2", Sum: 2},
-		{UserId: userId, Order: "test_3", Sum: 3},
+		{UserID: userID, Order: "test_1", Sum: 1},
+		{UserID: userID, Order: "test_2", Sum: 2},
+		{UserID: userID, Order: "test_3", Sum: 3},
 	}
 
 	addOrderQuery := `INSERT INTO orders (number, user_id) VALUES ($1, $2);`
@@ -122,13 +122,13 @@ func (s *BillingSuite) TestGetWithdrawals() {
 	s.Require().NoError(err)
 
 	for _, withdraw := range withdraws {
-		stmt.ExecContext(ctx, withdraw.Order, userId)
+		stmt.ExecContext(ctx, withdraw.Order, userID)
 		err := s.repository.Withdraw(ctx, withdraw)
 		s.Require().NoError(err)
 	}
 
 	s.Run("valid", func() {
-		w, err := s.repository.GetWithdrawals(ctx, userId)
+		w, err := s.repository.GetWithdrawals(ctx, userID)
 		s.Require().NoError(err)
 		s.Require().Len(w, 3)
 

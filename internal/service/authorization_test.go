@@ -100,7 +100,7 @@ func (s *AuthorizationSuite) TestLogin() {
 		Password: "password",
 	}
 	dbUser := domain.User{
-		Id:           uuid.New(),
+		ID:           uuid.New(),
 		Login:        "test",
 		HashPassword: "hash",
 	}
@@ -108,7 +108,7 @@ func (s *AuthorizationSuite) TestLogin() {
 	s.Run("valid", func() {
 		s.repository.EXPECT().Login(gomock.Any(), u.Login).Return(dbUser, nil)
 		s.authorizer.EXPECT().ValidatePassword(dbUser.HashPassword, u.Password).Return(true).Times(1)
-		s.authorizer.EXPECT().Token(dbUser.Id.String()).Return(token, nil).Times(1)
+		s.authorizer.EXPECT().Token(dbUser.ID.String()).Return(token, nil).Times(1)
 
 		t, err := s.service.Login(ctx, u)
 		s.Require().NoError(err)
@@ -135,7 +135,7 @@ func (s *AuthorizationSuite) TestLogin() {
 	s.Run("token error", func() {
 		s.repository.EXPECT().Login(gomock.Any(), u.Login).Return(dbUser, nil)
 		s.authorizer.EXPECT().ValidatePassword(dbUser.HashPassword, u.Password).Return(true).Times(1)
-		s.authorizer.EXPECT().Token(dbUser.Id.String()).Return("", errTest).Times(1)
+		s.authorizer.EXPECT().Token(dbUser.ID.String()).Return("", errTest).Times(1)
 
 		_, err := s.service.Login(ctx, u)
 		s.Require().ErrorIs(err, errTest)

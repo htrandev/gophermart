@@ -82,7 +82,7 @@ func run() error {
 	repository := postgres.NewRepository(db)
 
 	zl.Info("init authorizer")
-	authorizer := authorizer.New(flags.key, flags.tokenTtl)
+	authorizer := authorizer.New(flags.key, flags.tokenTTL)
 
 	zl.Info("init resty client")
 	rc := resty.New().

@@ -39,7 +39,7 @@ func (s *Service) Login(ctx context.Context, user application.AuthorizationReque
 		return "", domain.ErrIncorrectPassword
 	}
 
-	token, err := s.opts.Authorizer.Token(u.Id.String())
+	token, err := s.opts.Authorizer.Token(u.ID.String())
 	if err != nil {
 		return "", fmt.Errorf("create new token: %w", err)
 	}

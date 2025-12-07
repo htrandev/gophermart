@@ -10,7 +10,7 @@ import (
 
 type claims struct {
 	jwt.RegisteredClaims
-	UserId string `json:"Id"`
+	UserID string `json:"Id"`
 }
 
 type Authorizer struct {
@@ -45,7 +45,7 @@ func (a *Authorizer) Token(id string) (string, error) {
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(ttl),
 		},
-		UserId: id,
+		UserID: id,
 	})
 
 	token, err := t.SignedString(a.secretKey)
@@ -55,7 +55,7 @@ func (a *Authorizer) Token(id string) (string, error) {
 	return token, nil
 }
 
-func (a *Authorizer) GetIdFromToken(token string) (string, error) {
+func (a *Authorizer) GetIDFromToken(token string) (string, error) {
 	parseen, err := jwt.ParseWithClaims(
 		token,
 		&claims{},
@@ -77,5 +77,5 @@ func (a *Authorizer) GetIdFromToken(token string) (string, error) {
 		return "", ErrInvalidClaims
 	}
 
-	return claims.UserId, nil
+	return claims.UserID, nil
 }

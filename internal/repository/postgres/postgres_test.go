@@ -21,12 +21,12 @@ type RepositorySuite struct {
 }
 
 func (s *RepositorySuite) SetupSuite() {
-	databaseUri := "postgresql://postgres:postgres@postgres/praktikum?sslmode=disable"
-	if dbUri := os.Getenv("DATABASE_URI"); dbUri != "" {
-		databaseUri = dbUri
+	databaseURI := "postgresql://postgres:postgres@postgres/praktikum?sslmode=disable"
+	if dbURI := os.Getenv("DATABASE_URI"); dbURI != "" {
+		databaseURI = dbURI
 	}
 
-	db, err := sql.Open("pgx", databaseUri)
+	db, err := sql.Open("pgx", databaseURI)
 	s.Require().NoError(err)
 
 	s.db = db

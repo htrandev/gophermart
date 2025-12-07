@@ -19,7 +19,7 @@ func (h *Handler) GetBalance(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	method := zap.String("method", "GetBalance")
 
-	uid, ok := ctx.Value(application.ContextUserId{}).(uuid.UUID)
+	uid, ok := ctx.Value(application.ContextUserID{}).(uuid.UUID)
 	if !ok {
 		h.opts.Logger.Error("get user id from request", method)
 		rw.WriteHeader(http.StatusBadRequest)
@@ -54,7 +54,7 @@ func (h *Handler) Withdraw(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	method := zap.String("method", "withdraw")
 
-	uid, ok := ctx.Value(application.ContextUserId{}).(uuid.UUID)
+	uid, ok := ctx.Value(application.ContextUserID{}).(uuid.UUID)
 	if !ok {
 		h.opts.Logger.Error("get user id from request", method)
 		rw.WriteHeader(http.StatusBadRequest)
@@ -100,7 +100,7 @@ func (h *Handler) Withdrawals(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	method := zap.String("method", "GetOrders")
 
-	uid, ok := ctx.Value(application.ContextUserId{}).(uuid.UUID)
+	uid, ok := ctx.Value(application.ContextUserID{}).(uuid.UUID)
 	if !ok {
 		h.opts.Logger.Error("get user id from request", method)
 		rw.WriteHeader(http.StatusBadRequest)

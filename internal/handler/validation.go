@@ -113,7 +113,7 @@ func (f *WithdrawForm) BuildAndValidate(req *http.Request, uid uuid.UUID) error 
 	}
 
 	f.Req = domain.WithdrawRequest{
-		UserId: uid,
+		UserID: uid,
 		Order:  request.Order,
 		Sum:    request.Sum,
 	}

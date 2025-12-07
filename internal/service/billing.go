@@ -9,8 +9,8 @@ import (
 	"github.com/htrandev/gophermart/internal/domain"
 )
 
-func (s *Service) GetBalance(ctx context.Context, userId uuid.UUID) (domain.Balance, error) {
-	balance, err := s.opts.Repository.GetBalance(ctx, userId)
+func (s *Service) GetBalance(ctx context.Context, userID uuid.UUID) (domain.Balance, error) {
+	balance, err := s.opts.Repository.GetBalance(ctx, userID)
 	if err != nil {
 		return domain.Balance{}, fmt.Errorf("service: get balance: %w", err)
 	}
@@ -26,8 +26,8 @@ func (s *Service) Withdraw(ctx context.Context, withdraw domain.WithdrawRequest)
 	return nil
 }
 
-func (s *Service) GetWithdrawals(ctx context.Context, userId uuid.UUID) ([]domain.Withdraw, error) {
-	withdrawals, err := s.opts.Repository.GetWithdrawals(ctx, userId)
+func (s *Service) GetWithdrawals(ctx context.Context, userID uuid.UUID) ([]domain.Withdraw, error) {
+	withdrawals, err := s.opts.Repository.GetWithdrawals(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("service: get balance: %w", err)
 	}

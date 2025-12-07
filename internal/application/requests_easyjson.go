@@ -93,7 +93,7 @@ func (v *WithdrawRequest) UnmarshalJSON(data []byte) error {
 func (v *WithdrawRequest) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication(l, v)
 }
-func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication1(in *jlexer.Lexer, out *ContextUserId) {
+func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication1(in *jlexer.Lexer, out *ContextUserID) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -117,7 +117,7 @@ func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication1(in *j
 		in.Consumed()
 	}
 }
-func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication1(out *jwriter.Writer, in ContextUserId) {
+func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication1(out *jwriter.Writer, in ContextUserID) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -125,26 +125,26 @@ func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication1(out *
 }
 
 // MarshalJSON supports json.Marshaler interface
-func (v ContextUserId) MarshalJSON() ([]byte, error) {
+func (v ContextUserID) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
 	easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication1(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
-func (v ContextUserId) MarshalEasyJSON(w *jwriter.Writer) {
+func (v ContextUserID) MarshalEasyJSON(w *jwriter.Writer) {
 	easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication1(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
-func (v *ContextUserId) UnmarshalJSON(data []byte) error {
+func (v *ContextUserID) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
 	easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication1(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *ContextUserId) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *ContextUserID) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication1(l, v)
 }
 func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication2(in *jlexer.Lexer, out *AuthorizationRequest) {

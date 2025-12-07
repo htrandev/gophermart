@@ -39,10 +39,10 @@ func TestAuthorizer(t *testing.T) {
 
 func (s *AutorizerSuite) TestAuthorize() {
 	token := "token"
-	userId := uuid.New()
+	userID := uuid.New()
 
 	s.Run("valid", func() {
-		s.authorizer.EXPECT().GetIdFromToken(token).Return(userId.String(), nil).Times(1)
+		s.authorizer.EXPECT().GetIDFromToken(token).Return(userID.String(), nil).Times(1)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, "/", nil)
@@ -54,7 +54,7 @@ func (s *AutorizerSuite) TestAuthorize() {
 	})
 
 	s.Run("authorizer error", func() {
-		s.authorizer.EXPECT().GetIdFromToken(token).Return("", errTest).Times(1)
+		s.authorizer.EXPECT().GetIDFromToken(token).Return("", errTest).Times(1)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, "/", nil)
@@ -68,7 +68,7 @@ func (s *AutorizerSuite) TestAuthorize() {
 	})
 
 	s.Run("invalid user id", func() {
-		s.authorizer.EXPECT().GetIdFromToken(token).Return("test", nil).Times(1)
+		s.authorizer.EXPECT().GetIDFromToken(token).Return("test", nil).Times(1)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, "/", nil)

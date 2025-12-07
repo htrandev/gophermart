@@ -17,7 +17,7 @@ type Authorizer interface {
 	HashPassword(password string) (hahs string, err error)
 	ValidatePassword(hash, password string) bool
 	Token(id string) (token string, err error)
-	GetIdFromToken(token string) (string, error)
+	GetIDFromToken(token string) (string, error)
 }
 
 // Repository описывает интерфейс работы с базой данных.
@@ -28,12 +28,12 @@ type Repository interface {
 	Login(ctx context.Context, login string) (domain.User, error)
 
 	CreateOrder(ctx context.Context, order domain.Order) error
-	GetOrders(ctx context.Context, userId uuid.UUID) ([]domain.Order, error)
+	GetOrders(ctx context.Context, userID uuid.UUID) ([]domain.Order, error)
 	UpdateOrder(ctx context.Context, order domain.Order) error
 
-	GetBalance(ctx context.Context, userId uuid.UUID) (domain.Balance, error)
+	GetBalance(ctx context.Context, userID uuid.UUID) (domain.Balance, error)
 	Withdraw(ctx context.Context, withdraw domain.WithdrawRequest) error
-	GetWithdrawals(ctx context.Context, userId uuid.UUID) ([]domain.Withdraw, error)
+	GetWithdrawals(ctx context.Context, userID uuid.UUID) ([]domain.Withdraw, error)
 }
 
 // Client описывает интерфейс работы с сервисов по подсчету баллов.

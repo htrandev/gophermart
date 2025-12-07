@@ -7,7 +7,7 @@ import (
 )
 
 type WithdrawRequest struct {
-	UserId uuid.UUID
+	UserID uuid.UUID
 	Order  string
 	Sum    int
 }

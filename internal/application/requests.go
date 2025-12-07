@@ -5,8 +5,8 @@ type AuthorizationRequest struct {
 	Password string `json:"password"`
 }
 
-// ContextUserId определяет ключ для передачи userId через контекст.
-type ContextUserId struct{}
+// ContextUserID определяет ключ для передачи userId через контекст.
+type ContextUserID struct{}
 
 type WithdrawRequest struct {
 	Order string `json:"order"`

@@ -101,12 +101,12 @@ func easyjson120d1ca2DecodeGithubComHtrandevGophermartInternalDomain1(in *jlexer
 		key := in.UnsafeFieldName(false)
 		in.WantColon()
 		switch key {
-		case "Id":
+		case "ID":
 			if in.IsNull() {
 				in.Skip()
 			} else {
 				if data := in.UnsafeBytes(); in.Ok() {
-					in.AddError((out.Id).UnmarshalText(data))
+					in.AddError((out.ID).UnmarshalText(data))
 				}
 			}
 		case "number":
@@ -143,12 +143,12 @@ func easyjson120d1ca2DecodeGithubComHtrandevGophermartInternalDomain1(in *jlexer
 					in.AddError((out.ProcessedAt).UnmarshalJSON(data))
 				}
 			}
-		case "UserId":
+		case "UserID":
 			if in.IsNull() {
 				in.Skip()
 			} else {
 				if data := in.UnsafeBytes(); in.Ok() {
-					in.AddError((out.UserId).UnmarshalText(data))
+					in.AddError((out.UserID).UnmarshalText(data))
 				}
 			}
 		default:
@@ -166,9 +166,9 @@ func easyjson120d1ca2EncodeGithubComHtrandevGophermartInternalDomain1(out *jwrit
 	first := true
 	_ = first
 	{
-		const prefix string = ",\"Id\":"
+		const prefix string = ",\"ID\":"
 		out.RawString(prefix[1:])
-		out.RawText((in.Id).MarshalText())
+		out.RawText((in.ID).MarshalText())
 	}
 	{
 		const prefix string = ",\"number\":"
@@ -196,9 +196,9 @@ func easyjson120d1ca2EncodeGithubComHtrandevGophermartInternalDomain1(out *jwrit
 		out.Raw((in.ProcessedAt).MarshalJSON())
 	}
 	{
-		const prefix string = ",\"UserId\":"
+		const prefix string = ",\"UserID\":"
 		out.RawString(prefix)
-		out.RawText((in.UserId).MarshalText())
+		out.RawText((in.UserID).MarshalText())
 	}
 	out.RawByte('}')
 }

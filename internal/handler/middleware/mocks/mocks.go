@@ -39,17 +39,17 @@ func (m *MockAuthorizer) EXPECT() *MockAuthorizerMockRecorder {
 	return m.recorder
 }
 
-// GetIdFromToken mocks base method.
-func (m *MockAuthorizer) GetIdFromToken(token string) (string, error) {
+// GetIDFromToken mocks base method.
+func (m *MockAuthorizer) GetIDFromToken(token string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetIdFromToken", token)
+	ret := m.ctrl.Call(m, "GetIDFromToken", token)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetIdFromToken indicates an expected call of GetIdFromToken.
-func (mr *MockAuthorizerMockRecorder) GetIdFromToken(token any) *gomock.Call {
+// GetIDFromToken indicates an expected call of GetIDFromToken.
+func (mr *MockAuthorizerMockRecorder) GetIDFromToken(token any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetIdFromToken", reflect.TypeOf((*MockAuthorizer)(nil).GetIdFromToken), token)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetIDFromToken", reflect.TypeOf((*MockAuthorizer)(nil).GetIDFromToken), token)
 }

@@ -20,12 +20,12 @@ type Service interface {
 
 	// order
 	AddOrder(ctx context.Context, order domain.Order) error
-	GetOrders(ctx context.Context, userId uuid.UUID) ([]domain.Order, error)
+	GetOrders(ctx context.Context, userID uuid.UUID) ([]domain.Order, error)
 
 	// balance
-	GetBalance(ctx context.Context, userId uuid.UUID) (domain.Balance, error)
+	GetBalance(ctx context.Context, userID uuid.UUID) (domain.Balance, error)
 	Withdraw(ctx context.Context, withdraw domain.WithdrawRequest) (domain error)
-	GetWithdrawals(ctx context.Context, userId uuid.UUID) ([]domain.Withdraw, error)
+	GetWithdrawals(ctx context.Context, userID uuid.UUID) ([]domain.Withdraw, error)
 }
 
 type HandlerOptions struct {

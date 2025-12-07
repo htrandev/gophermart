@@ -101,12 +101,12 @@ func easyjson6f9638c7DecodeGithubComHtrandevGophermartInternalDomain1(in *jlexer
 		key := in.UnsafeFieldName(false)
 		in.WantColon()
 		switch key {
-		case "UserId":
+		case "UserID":
 			if in.IsNull() {
 				in.Skip()
 			} else {
 				if data := in.UnsafeBytes(); in.Ok() {
-					in.AddError((out.UserId).UnmarshalText(data))
+					in.AddError((out.UserID).UnmarshalText(data))
 				}
 			}
 		case "Order":
@@ -136,9 +136,9 @@ func easyjson6f9638c7EncodeGithubComHtrandevGophermartInternalDomain1(out *jwrit
 	first := true
 	_ = first
 	{
-		const prefix string = ",\"UserId\":"
+		const prefix string = ",\"UserID\":"
 		out.RawString(prefix[1:])
-		out.RawText((in.UserId).MarshalText())
+		out.RawText((in.UserID).MarshalText())
 	}
 	{
 		const prefix string = ",\"Order\":"

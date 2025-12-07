@@ -20,25 +20,25 @@ func (r *Repository) CreateOrder(ctx context.Context, order domain.Order) error 
 	}
 	defer tx.Rollback()
 
-	var userId uuid.UUID
-	if err := tx.QueryRowContext(ctx, selectQuery, order.Number).Scan(&userId); err != nil {
+	var userID uuid.UUID
+	if err := tx.QueryRowContext(ctx, selectQuery, order.Number).Scan(&userID); err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
 			return fmt.Errorf("repository/createOrder: select scan: %w", err)
 		}
 	}
 
-	switch userId {
+	switch userID {
 	// если заказа не было
 	case uuid.Nil:
 	// если пользователь уже загрузил этот заказ
-	case order.UserId:
+	case order.UserID:
 		return domain.ErrOrderAlreadyAddToUser
 	// если заказ был загружен другим пользователем
 	default:
 		return domain.ErrOrderCreatedByAnotherUser
 	}
 
-	if _, err := tx.ExecContext(ctx, createQuery, order.Number, order.UserId); err != nil {
+	if _, err := tx.ExecContext(ctx, createQuery, order.Number, order.UserID); err != nil {
 		return fmt.Errorf("repository/createOrder: create new order: %w", err)
 	}
 
@@ -48,7 +48,7 @@ func (r *Repository) CreateOrder(ctx context.Context, order domain.Order) error 
 	return nil
 }
 
-func (r *Repository) GetOrders(ctx context.Context, userId uuid.UUID) ([]domain.Order, error) {
+func (r *Repository) GetOrders(ctx context.Context, userID uuid.UUID) ([]domain.Order, error) {
 	query := `SELECT 
 		number, 
 		status, 
@@ -59,7 +59,7 @@ func (r *Repository) GetOrders(ctx context.Context, userId uuid.UUID) ([]domain.
 	ORDER BY created_at DESC
 	;`
 
-	rows, err := r.db.QueryContext(ctx, query, userId)
+	rows, err := r.db.QueryContext(ctx, query, userID)
 	if err != nil {
 		return nil, fmt.Errorf("repository/getOrders: query: %w", err)
 	}
@@ -80,7 +80,7 @@ func (r *Repository) GetOrders(ctx context.Context, userId uuid.UUID) ([]domain.
 			return nil, fmt.Errorf("repository/getOrders: scan: %w", err)
 		}
 
-		order.UserId = userId
+		order.UserID = userID
 		order.Status = domain.ConvertStringToOrderStatus(status)
 
 		orders = append(orders, order)
@@ -137,9 +137,9 @@ func (r *Repository) processOrder(ctx context.Context, order domain.Order) error
 
 	if _, err := tx.ExecContext(ctx, userQuery,
 		order.Accrual,
-		order.UserId,
+		order.UserID,
 	); err != nil {
-		return fmt.Errorf("update user [%s] balance for order [%s]: %w", order.UserId, order.Number, err)
+		return fmt.Errorf("update user [%s] balance for order [%s]: %w", order.UserID, order.Number, err)
 	}
 
 	if err := tx.Commit(); err != nil {

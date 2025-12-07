@@ -64,7 +64,7 @@ func NewClient(opts *ClientOptions) *Client {
 func (c *Client) GetAccrual(ctx context.Context, number string) (domain.Accrual, error) {
 	var accrual domain.Accrual
 
-	u := c.buildUrl(number)
+	u := c.buildURL(number)
 	resp, err := c.opts.Client.R().
 		SetContext(ctx).
 		SetResult(&accrual).
@@ -83,7 +83,7 @@ func (c *Client) GetAccrual(ctx context.Context, number string) (domain.Accrual,
 	return accrual, nil
 }
 
-func (c *Client) buildUrl(number string) string {
+func (c *Client) buildURL(number string) string {
 	u := url.URL{
 		Scheme: "http",
 		Host:   c.opts.Addr,

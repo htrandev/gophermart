@@ -11,7 +11,7 @@ import (
 )
 
 type Authorizer interface {
-	GetIdFromToken(token string) (string, error)
+	GetIDFromToken(token string) (string, error)
 }
 
 func New(auth Authorizer, handler *handler.Handler, l *zap.Logger) (*chi.Mux, error) {

@@ -39,7 +39,7 @@ func (r *Repository) Login(ctx context.Context, login string) (domain.User, erro
 	WHERE login = $1;`
 
 	err := r.db.QueryRowContext(ctx, query, login).Scan(
-		&u.Id,
+		&u.ID,
 		&u.Login,
 		&u.HashPassword,
 	)

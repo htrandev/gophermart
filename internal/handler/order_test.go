@@ -33,11 +33,11 @@ func (s *OrderSuite) TestAddOrder() {
 	url := "/api/user/orders"
 
 	orderNumber := "12345678903"
-	userId := uuid.New()
+	userID := uuid.New()
 
 	order := domain.Order{
 		Number: orderNumber,
-		UserId: userId,
+		UserID: userID,
 	}
 
 	s.Run("valid", func() {
@@ -46,7 +46,7 @@ func (s *OrderSuite) TestAddOrder() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(orderNumber))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.AddOrder)
@@ -76,7 +76,7 @@ func (s *OrderSuite) TestAddOrder() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(orderNumber))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, uuid.Nil)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, uuid.Nil)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.AddOrder)
@@ -92,7 +92,7 @@ func (s *OrderSuite) TestAddOrder() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, &handler.ErrorReader{})
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.AddOrder)
@@ -108,7 +108,7 @@ func (s *OrderSuite) TestAddOrder() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(""))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.AddOrder)
@@ -124,7 +124,7 @@ func (s *OrderSuite) TestAddOrder() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader("411111111111111"))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.AddOrder)
@@ -142,7 +142,7 @@ func (s *OrderSuite) TestAddOrder() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(orderNumber))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.AddOrder)
@@ -160,7 +160,7 @@ func (s *OrderSuite) TestAddOrder() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(orderNumber))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.AddOrder)
@@ -178,7 +178,7 @@ func (s *OrderSuite) TestAddOrder() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(orderNumber))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.AddOrder)
@@ -194,19 +194,19 @@ func (s *OrderSuite) TestAddOrder() {
 func (s *OrderSuite) TestGetOrder() {
 	url := "/api/user/orders"
 
-	userId := uuid.New()
+	userID := uuid.New()
 	orders := domain.Orders{
 		{Number: "order_1", Status: domain.OrderStatusNew, Accrual: 0, CreatedAt: time.Now()},
 		{Number: "order_2", Status: domain.OrderStatusProcessed, Accrual: 100, CreatedAt: time.Now()},
 	}
 
 	s.Run("valid", func() {
-		s.service.EXPECT().GetOrders(gomock.Any(), userId).Return(orders, nil).Times(1)
+		s.service.EXPECT().GetOrders(gomock.Any(), userID).Return(orders, nil).Times(1)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.GetOrders)
@@ -237,7 +237,7 @@ func (s *OrderSuite) TestGetOrder() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, uuid.Nil)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, uuid.Nil)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.GetOrders)
@@ -250,12 +250,12 @@ func (s *OrderSuite) TestGetOrder() {
 	})
 
 	s.Run("order not found", func() {
-		s.service.EXPECT().GetOrders(gomock.Any(), userId).Return(nil, domain.ErrNotFound).Times(1)
+		s.service.EXPECT().GetOrders(gomock.Any(), userID).Return(nil, domain.ErrNotFound).Times(1)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.GetOrders)
@@ -268,12 +268,12 @@ func (s *OrderSuite) TestGetOrder() {
 	})
 
 	s.Run("service error", func() {
-		s.service.EXPECT().GetOrders(gomock.Any(), userId).Return(nil, errTest).Times(1)
+		s.service.EXPECT().GetOrders(gomock.Any(), userID).Return(nil, errTest).Times(1)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.GetOrders)

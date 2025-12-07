@@ -77,7 +77,7 @@ func (a *AuthorizerSuite) TestToken() {
 
 		c, ok := parsed.Claims.(*claims)
 		a.Require().True(ok)
-		a.Require().Equal(id, c.UserId)
+		a.Require().Equal(id, c.UserID)
 	})
 }
 
@@ -88,9 +88,9 @@ func (a *AuthorizerSuite) TestGetIdFromToken() {
 		token, err := a.authorizer.Token(id)
 		a.Require().NoError(err)
 
-		parsedId, err := a.authorizer.GetIdFromToken(token)
+		parsedID, err := a.authorizer.GetIDFromToken(token)
 		a.Require().NoError(err)
-		a.Require().Equal(id, parsedId)
+		a.Require().Equal(id, parsedID)
 	})
 
 	a.Run("wrong method", func() {
@@ -102,13 +102,13 @@ func (a *AuthorizerSuite) TestGetIdFromToken() {
 			RegisteredClaims: jwt.RegisteredClaims{
 				ExpiresAt: jwt.NewNumericDate(ttl),
 			},
-			UserId: id,
+			UserID: id,
 		})
 
 		token, err := t.SignedString(privKey)
 		a.Require().NoError(err)
 
-		_, err = a.authorizer.GetIdFromToken(token)
+		_, err = a.authorizer.GetIDFromToken(token)
 		a.Require().ErrorIs(err, ErrUnexpectedMethod)
 	})
 }

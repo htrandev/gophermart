@@ -33,7 +33,7 @@ func (s *OrderSuite) TestAddOrder() {
 	id := uuid.New()
 	order := domain.Order{
 		Number: "test",
-		UserId: id,
+		UserID: id,
 	}
 
 	s.Run("valid", func() {
@@ -56,13 +56,13 @@ func (s *OrderSuite) TestGetOrders() {
 
 	id := uuid.New()
 
-	orderId1 := uuid.New()
-	orderId2 := uuid.New()
-	orderId3 := uuid.New()
+	orderID1 := uuid.New()
+	orderID2 := uuid.New()
+	orderID3 := uuid.New()
 	dbOrders := []domain.Order{
-		{Id: orderId1, Number: "order_1", Status: domain.OrderStatusNew, Accrual: 0, UserId: id},
-		{Id: orderId2, Number: "order_2", Status: domain.OrderStatusProcessing, Accrual: 0, UserId: id},
-		{Id: orderId3, Number: "order_3", Status: domain.OrderStatusProcessed, Accrual: 100, UserId: id},
+		{ID: orderID1, Number: "order_1", Status: domain.OrderStatusNew, Accrual: 0, UserID: id},
+		{ID: orderID2, Number: "order_2", Status: domain.OrderStatusProcessing, Accrual: 0, UserID: id},
+		{ID: orderID3, Number: "order_3", Status: domain.OrderStatusProcessed, Accrual: 100, UserID: id},
 	}
 
 	s.Run("valid", func() {
@@ -87,7 +87,7 @@ func (s *OrderSuite) TestUpdateOrder() {
 	id := uuid.New()
 	order := domain.Order{
 		Number: "test",
-		UserId: id,
+		UserID: id,
 		Status: domain.OrderStatusProcessing,
 	}
 
@@ -102,7 +102,7 @@ func (s *OrderSuite) TestUpdateOrder() {
 	s.Run("order processed", func() {
 		processedOrder := domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessed,
 		}
 		s.repository.EXPECT().UpdateOrder(gomock.Any(), processedOrder).Return(nil).Times(1)
@@ -129,7 +129,7 @@ func (s *OrderSuite) TestProcessOrder() {
 	s.Run("order status new", func() {
 		order := domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusNew,
 		}
 
@@ -142,7 +142,7 @@ func (s *OrderSuite) TestProcessOrder() {
 		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(accrual, nil).Times(1)
 		s.repository.EXPECT().UpdateOrder(gomock.Any(), domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessing,
 		}).Return(nil).Times(1)
 
@@ -150,7 +150,7 @@ func (s *OrderSuite) TestProcessOrder() {
 		s.Require().NoError(err)
 		s.Require().Equal(domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessing,
 		}, o)
 	})
@@ -158,7 +158,7 @@ func (s *OrderSuite) TestProcessOrder() {
 	s.Run("order status new", func() {
 		order := domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessing,
 		}
 
@@ -174,7 +174,7 @@ func (s *OrderSuite) TestProcessOrder() {
 		s.Require().NoError(err)
 		s.Require().Equal(domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessing,
 		}, o)
 	})
@@ -182,7 +182,7 @@ func (s *OrderSuite) TestProcessOrder() {
 	s.Run("accural status unknown", func() {
 		order := domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessing,
 		}
 
@@ -197,7 +197,7 @@ func (s *OrderSuite) TestProcessOrder() {
 		s.Require().NoError(err)
 		s.Require().Equal(domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessing,
 		}, o)
 	})
@@ -205,7 +205,7 @@ func (s *OrderSuite) TestProcessOrder() {
 	s.Run("accural status invalid", func() {
 		order := domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessing,
 		}
 
@@ -217,7 +217,7 @@ func (s *OrderSuite) TestProcessOrder() {
 		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(accrual, nil).Times(1)
 		s.repository.EXPECT().UpdateOrder(gomock.Any(), domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusInvalid,
 		}).Return(nil).Times(1)
 
@@ -225,7 +225,7 @@ func (s *OrderSuite) TestProcessOrder() {
 		s.Require().NoError(err)
 		s.Require().Equal(domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusInvalid,
 		}, o)
 	})
@@ -233,7 +233,7 @@ func (s *OrderSuite) TestProcessOrder() {
 	s.Run("accural status processed", func() {
 		order := domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessing,
 		}
 
@@ -245,7 +245,7 @@ func (s *OrderSuite) TestProcessOrder() {
 		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(accrual, nil).Times(1)
 		s.repository.EXPECT().UpdateOrder(gomock.Any(), domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessed,
 		}).Return(nil).Times(1)
 
@@ -257,7 +257,7 @@ func (s *OrderSuite) TestProcessOrder() {
 	s.Run("client error", func() {
 		order := domain.Order{
 			Number: "test",
-			UserId: id,
+			UserID: id,
 			Status: domain.OrderStatusProcessing,
 		}
 

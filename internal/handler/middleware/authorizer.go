@@ -14,7 +14,7 @@ import (
 //
 //go:generate mockgen -source=authorizer.go -destination=mocks/mocks.go
 type Authorizer interface {
-	GetIdFromToken(token string) (string, error)
+	GetIDFromToken(token string) (string, error)
 }
 
 type Auth struct {
@@ -34,7 +34,7 @@ func (a *Auth) Authorize() func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			token := getTokenFromHeader(r.Header.Get("Authorization"))
 
-			id, err := a.auth.GetIdFromToken(token)
+			id, err := a.auth.GetIDFromToken(token)
 			if err != nil {
 				a.logger.Error("cant get id from token", zap.Error(err))
 				w.WriteHeader(http.StatusInternalServerError)
@@ -48,7 +48,7 @@ func (a *Auth) Authorize() func(next http.Handler) http.Handler {
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), application.ContextUserId{}, uid)
+			ctx := context.WithValue(r.Context(), application.ContextUserID{}, uid)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

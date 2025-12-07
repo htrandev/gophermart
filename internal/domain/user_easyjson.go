@@ -31,12 +31,12 @@ func easyjson9e1087fdDecodeGithubComHtrandevGophermartInternalDomain(in *jlexer.
 		key := in.UnsafeFieldName(false)
 		in.WantColon()
 		switch key {
-		case "Id":
+		case "ID":
 			if in.IsNull() {
 				in.Skip()
 			} else {
 				if data := in.UnsafeBytes(); in.Ok() {
-					in.AddError((out.Id).UnmarshalText(data))
+					in.AddError((out.ID).UnmarshalText(data))
 				}
 			}
 		case "Login":
@@ -78,9 +78,9 @@ func easyjson9e1087fdEncodeGithubComHtrandevGophermartInternalDomain(out *jwrite
 	first := true
 	_ = first
 	{
-		const prefix string = ",\"Id\":"
+		const prefix string = ",\"ID\":"
 		out.RawString(prefix[1:])
-		out.RawText((in.Id).MarshalText())
+		out.RawText((in.ID).MarshalText())
 	}
 	{
 		const prefix string = ",\"Login\":"

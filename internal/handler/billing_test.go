@@ -30,15 +30,15 @@ func TestBilling(t *testing.T) {
 
 func (s *BillingSuite) TestGetBalance() {
 	url := "/api/user/balance"
-	userId := uuid.New()
+	userID := uuid.New()
 
 	s.Run("valid", func() {
-		s.service.EXPECT().GetBalance(gomock.Any(), userId).Return(domain.Balance{}, nil)
+		s.service.EXPECT().GetBalance(gomock.Any(), userID).Return(domain.Balance{}, nil)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.GetBalance)
@@ -69,7 +69,7 @@ func (s *BillingSuite) TestGetBalance() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, uuid.Nil)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, uuid.Nil)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.GetBalance)
@@ -82,12 +82,12 @@ func (s *BillingSuite) TestGetBalance() {
 	})
 
 	s.Run("service error", func() {
-		s.service.EXPECT().GetBalance(gomock.Any(), userId).Return(domain.Balance{}, errTest)
+		s.service.EXPECT().GetBalance(gomock.Any(), userID).Return(domain.Balance{}, errTest)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.GetBalance)
@@ -103,9 +103,9 @@ func (s *BillingSuite) TestGetBalance() {
 func (s *BillingSuite) TestWithdraw() {
 	url := "/api/user/balance/withdraw"
 
-	userId := uuid.New()
+	userID := uuid.New()
 	body := `{"order":"12345678903", "sum":123}`
-	withdraw := domain.WithdrawRequest{Order: "12345678903", Sum: 123, UserId: userId}
+	withdraw := domain.WithdrawRequest{Order: "12345678903", Sum: 123, UserID: userID}
 
 	s.Run("valid", func() {
 		s.service.EXPECT().Withdraw(gomock.Any(), withdraw).Return(nil).Times(1)
@@ -113,7 +113,7 @@ func (s *BillingSuite) TestWithdraw() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(body))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdraw)
@@ -143,7 +143,7 @@ func (s *BillingSuite) TestWithdraw() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(body))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, uuid.Nil)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, uuid.Nil)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdraw)
@@ -159,7 +159,7 @@ func (s *BillingSuite) TestWithdraw() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, &handler.ErrorReader{})
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdraw)
@@ -177,7 +177,7 @@ func (s *BillingSuite) TestWithdraw() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(body))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdraw)
@@ -195,7 +195,7 @@ func (s *BillingSuite) TestWithdraw() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(body))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdraw)
@@ -213,7 +213,7 @@ func (s *BillingSuite) TestWithdraw() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, strings.NewReader(body))
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdraw)
@@ -229,15 +229,15 @@ func (s *BillingSuite) TestWithdraw() {
 func (s *BillingSuite) TestWithdrawals() {
 	url := "/api/user/withdrawals"
 
-	userId := uuid.New()
+	userID := uuid.New()
 
 	s.Run("valid", func() {
-		s.service.EXPECT().GetWithdrawals(gomock.Any(), userId).Return([]domain.Withdraw{}, nil).Times(1)
+		s.service.EXPECT().GetWithdrawals(gomock.Any(), userID).Return([]domain.Withdraw{}, nil).Times(1)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdrawals)
@@ -268,7 +268,7 @@ func (s *BillingSuite) TestWithdrawals() {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodPost, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, uuid.Nil)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, uuid.Nil)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdrawals)
@@ -281,12 +281,12 @@ func (s *BillingSuite) TestWithdrawals() {
 	})
 
 	s.Run("no withdrawals", func() {
-		s.service.EXPECT().GetWithdrawals(gomock.Any(), userId).Return([]domain.Withdraw{}, domain.ErrNotFound).Times(1)
+		s.service.EXPECT().GetWithdrawals(gomock.Any(), userID).Return([]domain.Withdraw{}, domain.ErrNotFound).Times(1)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdrawals)
@@ -299,12 +299,12 @@ func (s *BillingSuite) TestWithdrawals() {
 	})
 
 	s.Run("service error", func() {
-		s.service.EXPECT().GetWithdrawals(gomock.Any(), userId).Return([]domain.Withdraw{}, errTest).Times(1)
+		s.service.EXPECT().GetWithdrawals(gomock.Any(), userID).Return([]domain.Withdraw{}, errTest).Times(1)
 
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, url, nil)
 
-		ctx := context.WithValue(context.Background(), application.ContextUserId{}, userId)
+		ctx := context.WithValue(context.Background(), application.ContextUserID{}, userID)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc(url, s.handler.Withdrawals)
