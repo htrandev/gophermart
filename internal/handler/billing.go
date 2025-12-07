@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"bytes"
-	"compress/gzip"
 	"errors"
 	"fmt"
 	"net/http"
@@ -138,18 +136,9 @@ func (h *Handler) Withdrawals(rw http.ResponseWriter, r *http.Request) {
 }
 
 func buildWithdrawalsResponse(withdrawals domain.Withdrawals) ([]byte, error) {
-	var buf bytes.Buffer
-	gz := gzip.NewWriter(&buf)
-
 	p, err := easyjson.Marshal(withdrawals)
 	if err != nil {
 		return nil, fmt.Errorf("buildManyBody: can't marshal metrics: %w", err)
 	}
-	_, err = gz.Write(p)
-	if err != nil {
-		return nil, fmt.Errorf("buildManyBody: can't write: %w", err)
-	}
-
-	gz.Close()
-	return buf.Bytes(), nil
+	return p, nil
 }
