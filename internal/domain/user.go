@@ -2,6 +2,7 @@ package domain
 
 import "github.com/google/uuid"
 
+// User определяет пользователя.
 type User struct {
 	ID           uuid.UUID
 	Login        string
@@ -10,6 +11,7 @@ type User struct {
 	Balance      Balance
 }
 
+// Balance определяет баланс пользователя.
 type Balance struct {
 	Balance   float64 `json:"current"`
 	Withdrawn float64 `json:"withdrawn"`

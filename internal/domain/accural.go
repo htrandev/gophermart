@@ -1,5 +1,6 @@
 package domain
 
+// AccrualStatus статус расчета начислений в системе расчета баллов лояльности.
 type AccrualStatus string
 
 const (
@@ -10,10 +11,12 @@ const (
 	AccrualStatusProcessed  AccrualStatus = "PROCESSED"
 )
 
+// String преобразует внутренний статус в строку.
 func (a AccrualStatus) String() string {
 	return string(a)
 }
 
+// Accrual определяет формат ответа от систумы расчета баллов лояльности.
 type Accrual struct {
 	Order   string        `json:"order"`
 	Status  AccrualStatus `json:"status"`

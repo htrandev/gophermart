@@ -2,6 +2,7 @@ package application
 
 import "time"
 
+// Order определяет формат ответа для получения списка загруженных номеров заказов.
 type Order struct {
 	Number    string    `json:"number"`
 	Status    string    `json:"status"`

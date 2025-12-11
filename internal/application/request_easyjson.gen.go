@@ -17,7 +17,7 @@ var (
 	_ easyjson.Marshaler
 )
 
-func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication(in *jlexer.Lexer, out *WithdrawRequest) {
+func easyjson64b1a15DecodeGithubComHtrandevGophermartInternalApplication(in *jlexer.Lexer, out *WithdrawRequest) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -53,7 +53,7 @@ func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication(in *jl
 		in.Consumed()
 	}
 }
-func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication(out *jwriter.Writer, in WithdrawRequest) {
+func easyjson64b1a15EncodeGithubComHtrandevGophermartInternalApplication(out *jwriter.Writer, in WithdrawRequest) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -73,27 +73,27 @@ func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication(out *j
 // MarshalJSON supports json.Marshaler interface
 func (v WithdrawRequest) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication(&w, v)
+	easyjson64b1a15EncodeGithubComHtrandevGophermartInternalApplication(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v WithdrawRequest) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication(w, v)
+	easyjson64b1a15EncodeGithubComHtrandevGophermartInternalApplication(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *WithdrawRequest) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication(&r, v)
+	easyjson64b1a15DecodeGithubComHtrandevGophermartInternalApplication(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *WithdrawRequest) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication(l, v)
+	easyjson64b1a15DecodeGithubComHtrandevGophermartInternalApplication(l, v)
 }
-func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication1(in *jlexer.Lexer, out *ContextUserID) {
+func easyjson64b1a15DecodeGithubComHtrandevGophermartInternalApplication1(in *jlexer.Lexer, out *ContextUserID) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -117,7 +117,7 @@ func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication1(in *j
 		in.Consumed()
 	}
 }
-func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication1(out *jwriter.Writer, in ContextUserID) {
+func easyjson64b1a15EncodeGithubComHtrandevGophermartInternalApplication1(out *jwriter.Writer, in ContextUserID) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -127,27 +127,27 @@ func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication1(out *
 // MarshalJSON supports json.Marshaler interface
 func (v ContextUserID) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication1(&w, v)
+	easyjson64b1a15EncodeGithubComHtrandevGophermartInternalApplication1(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v ContextUserID) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication1(w, v)
+	easyjson64b1a15EncodeGithubComHtrandevGophermartInternalApplication1(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *ContextUserID) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication1(&r, v)
+	easyjson64b1a15DecodeGithubComHtrandevGophermartInternalApplication1(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *ContextUserID) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication1(l, v)
+	easyjson64b1a15DecodeGithubComHtrandevGophermartInternalApplication1(l, v)
 }
-func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication2(in *jlexer.Lexer, out *AuthorizationRequest) {
+func easyjson64b1a15DecodeGithubComHtrandevGophermartInternalApplication2(in *jlexer.Lexer, out *AuthorizationRequest) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -183,7 +183,7 @@ func easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication2(in *j
 		in.Consumed()
 	}
 }
-func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication2(out *jwriter.Writer, in AuthorizationRequest) {
+func easyjson64b1a15EncodeGithubComHtrandevGophermartInternalApplication2(out *jwriter.Writer, in AuthorizationRequest) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -203,23 +203,23 @@ func easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication2(out *
 // MarshalJSON supports json.Marshaler interface
 func (v AuthorizationRequest) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication2(&w, v)
+	easyjson64b1a15EncodeGithubComHtrandevGophermartInternalApplication2(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v AuthorizationRequest) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson11d1a9baEncodeGithubComHtrandevGophermartInternalApplication2(w, v)
+	easyjson64b1a15EncodeGithubComHtrandevGophermartInternalApplication2(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *AuthorizationRequest) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication2(&r, v)
+	easyjson64b1a15DecodeGithubComHtrandevGophermartInternalApplication2(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *AuthorizationRequest) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson11d1a9baDecodeGithubComHtrandevGophermartInternalApplication2(l, v)
+	easyjson64b1a15DecodeGithubComHtrandevGophermartInternalApplication2(l, v)
 }

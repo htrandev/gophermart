@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// OrderStatus статус заказа.
 type OrderStatus uint8
 
 const (
@@ -25,6 +26,7 @@ var orderStatusString = []string{
 	"PROCESSED",
 }
 
+// ConvertStringToOrderStatus преобразует строку во внутренний статус заказа.
 func ConvertStringToOrderStatus(value string) OrderStatus {
 	switch value {
 	case "NEW":
@@ -40,10 +42,12 @@ func ConvertStringToOrderStatus(value string) OrderStatus {
 	}
 }
 
+// String преобразует внутренний статус в строку.
 func (o OrderStatus) String() string {
 	return orderStatusString[o]
 }
 
+// Order определяет заказ.
 type Order struct {
 	ID          uuid.UUID
 	Number      string      `json:"number"`
@@ -54,6 +58,7 @@ type Order struct {
 	UserID      uuid.UUID
 }
 
+// Equal возвращает true, если заказ пользователя равен v.
 func (o Order) IsEqual(v Order) bool {
 	return o.ID == v.ID &&
 		o.Number == v.Number &&
@@ -63,6 +68,7 @@ func (o Order) IsEqual(v Order) bool {
 		o.UserID == v.UserID
 }
 
+// IsEmpty возвращает true, если заказ пользователя пуст.
 func (o Order) IsEmpty() bool {
 	return o.IsEqual(Order{})
 }
