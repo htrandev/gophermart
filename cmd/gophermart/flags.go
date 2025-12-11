@@ -27,26 +27,26 @@ func parseFlags() (flags, error) {
 	flag.DurationVar(&f.tokenTTL, "ttl", 1*time.Hour, "token ttl in seconds")
 	flag.StringVar(&f.accrualSystemAddr, "r", "localhost:8080", "addres of accrual system")
 
-	if addr := os.Getenv("ADDRESS"); addr != "" {
+	if addr, ok := os.LookupEnv("ADDRESS"); ok {
 		f.addr = addr
 	}
-	if lvl := os.Getenv("LOG_LEVEL"); lvl != "" {
+	if lvl, ok := os.LookupEnv("LOG_LEVEL"); ok {
 		f.logLvl = lvl
 	}
-	if dbURI := os.Getenv("DATABASE_URI"); dbURI != "" {
+	if dbURI, ok := os.LookupEnv("DATABASE_URI"); ok {
 		f.databaseURI = dbURI
 	}
-	if key := os.Getenv("KEY"); key != "" {
+	if key, ok := os.LookupEnv("KEY"); ok {
 		f.key = key
 	}
-	if ttl := os.Getenv("TOKEN_TTL"); ttl != "" {
+	if ttl, ok := os.LookupEnv("TOKEN_TTL"); ok {
 		v, err := strconv.Atoi(ttl)
 		if err != nil {
 			return f, fmt.Errorf("parse store interval: %w", err)
 		}
 		f.tokenTTL = time.Duration(v) * time.Second
 	}
-	if accrualSystemAddr := os.Getenv("ACCRUAL_SYSTEM_ADDRESS"); accrualSystemAddr != "" {
+	if accrualSystemAddr, ok := os.LookupEnv("ACCRUAL_SYSTEM_ADDRESS"); ok {
 		f.accrualSystemAddr = accrualSystemAddr
 	}
 
