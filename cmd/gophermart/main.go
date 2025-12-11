@@ -30,8 +30,7 @@ import (
 
 func main() {
 	if err := run(); err != nil {
-		log.Printf("run ends with error: %s", err.Error())
-		os.Exit(1)
+		log.Fatalf("run ends with error: %s", err.Error())
 	}
 }
 
