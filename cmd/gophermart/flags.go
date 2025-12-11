@@ -15,6 +15,7 @@ type flags struct {
 	key               string
 	tokenTTL          time.Duration
 	accrualSystemAddr string
+	dbMaxRetry        int
 }
 
 func parseFlags() (flags, error) {
@@ -26,6 +27,7 @@ func parseFlags() (flags, error) {
 	flag.StringVar(&f.key, "k", "", "secret key")
 	flag.DurationVar(&f.tokenTTL, "ttl", 1*time.Hour, "token ttl in seconds")
 	flag.StringVar(&f.accrualSystemAddr, "r", "localhost:8080", "addres of accrual system")
+	flag.IntVar(&f.dbMaxRetry, "max-retry", 3, "db max retry attemp")
 
 	if addr, ok := os.LookupEnv("ADDRESS"); ok {
 		f.addr = addr
@@ -42,12 +44,19 @@ func parseFlags() (flags, error) {
 	if ttl, ok := os.LookupEnv("TOKEN_TTL"); ok {
 		v, err := strconv.Atoi(ttl)
 		if err != nil {
-			return f, fmt.Errorf("parse store interval: %w", err)
+			return flags{}, fmt.Errorf("parse store interval: %w", err)
 		}
 		f.tokenTTL = time.Duration(v) * time.Second
 	}
 	if accrualSystemAddr, ok := os.LookupEnv("ACCRUAL_SYSTEM_ADDRESS"); ok {
 		f.accrualSystemAddr = accrualSystemAddr
+	}
+	if dbMaxRetry, ok := os.LookupEnv("DB_MAX_RETRY"); ok {
+		v, err := strconv.Atoi(dbMaxRetry)
+		if err != nil {
+			return flags{}, fmt.Errorf("parse db max retry: %w", err)
+		}
+		f.dbMaxRetry = v
 	}
 
 	return f, nil

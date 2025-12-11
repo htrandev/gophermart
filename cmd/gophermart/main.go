@@ -79,7 +79,7 @@ func run() error {
 	}
 
 	zl.Info("init repository")
-	repository := postgres.NewRepository(db)
+	repository := postgres.NewRepository(db, flags.dbMaxRetry)
 
 	zl.Info("init authorizer")
 	authorizer := authorizer.New(flags.key, flags.tokenTTL)

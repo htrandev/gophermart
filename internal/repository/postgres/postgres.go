@@ -11,11 +11,15 @@ import (
 )
 
 type Repository struct {
-	db *sql.DB
+	db       *sql.DB
+	maxRetry int
 }
 
-func NewRepository(db *sql.DB) *Repository {
-	return &Repository{db: db}
+func NewRepository(db *sql.DB, maxRetry int) *Repository {
+	if maxRetry <= 0 {
+		maxRetry = 3
+	}
+	return &Repository{db: db, maxRetry: maxRetry}
 }
 
 func (r *Repository) Close() error {

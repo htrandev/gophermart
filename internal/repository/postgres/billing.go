@@ -3,9 +3,14 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgerrcode"
+	"github.com/jackc/pgx/v5/pgconn"
+
 	"github.com/htrandev/gophermart/internal/domain"
 )
 
@@ -24,6 +29,28 @@ func (r *Repository) GetBalance(ctx context.Context, userID uuid.UUID) (domain.B
 }
 
 func (r *Repository) Withdraw(ctx context.Context, withdraw domain.WithdrawRequest) error {
+	err := r.withdraw(ctx, withdraw)
+	if err != nil {
+		if isRetryable(err) {
+			for i := 0; i < r.maxRetry; i++ {
+				delay := i*2 + 1
+				time.Sleep(time.Second * time.Duration(delay))
+				if err := r.withdraw(ctx, withdraw); err != nil {
+					if isRetryable(err) {
+						continue
+					}
+					return fmt.Errorf("repository/withdrawn: withdraw retry: %d: unretriable: %w", i+1, err)
+				}
+				return nil
+			}
+			return fmt.Errorf("repository/withdrawn: reach retry limits: %w", err)
+		}
+		return fmt.Errorf("repository/withdrawn: withdraw: unretriable: %w", err)
+	}
+	return nil
+}
+
+func (r *Repository) withdraw(ctx context.Context, withdraw domain.WithdrawRequest) error {
 	tx, err := r.db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelReadCommitted})
 	if err != nil {
 		return fmt.Errorf("repository/withdraw: begin transaction: %w", err)
@@ -95,4 +122,21 @@ func (r *Repository) GetWithdrawals(ctx context.Context, userID uuid.UUID) ([]do
 		return nil, domain.ErrNotFound
 	}
 	return withdrawals, nil
+}
+
+func isSerializationFailure(err error) bool {
+	var pgErr *pgconn.PgError
+	return errors.As(err, &pgErr) && pgErr.Code == pgerrcode.SerializationFailure
+}
+
+func isPgConnErr(err error) bool {
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) && pgerrcode.IsConnectionException(pgErr.Code) {
+		return true
+	}
+	return false
+}
+
+func isRetryable(err error) bool {
+	return isPgConnErr(err) || isSerializationFailure(err)
 }

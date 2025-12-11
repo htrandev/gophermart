@@ -30,7 +30,7 @@ func (s *RepositorySuite) SetupSuite() {
 	s.Require().NoError(err)
 
 	s.db = db
-	s.repository = postgres.NewRepository(db)
+	s.repository = postgres.NewRepository(db, 3)
 }
 
 func (s *RepositorySuite) TearDownSuite() {
