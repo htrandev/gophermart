@@ -21,6 +21,7 @@ import (
 	"github.com/htrandev/gophermart/internal/clients/accrual"
 	"github.com/htrandev/gophermart/internal/handler"
 	"github.com/htrandev/gophermart/internal/repository/postgres"
+	"github.com/htrandev/gophermart/internal/repository/postgres/migration"
 	"github.com/htrandev/gophermart/internal/router"
 	"github.com/htrandev/gophermart/internal/service"
 	"github.com/htrandev/gophermart/pkg/logger"
@@ -69,12 +70,12 @@ func run() error {
 		return fmt.Errorf("goose: create new provider: %w", err)
 	}
 
-	migrationCtx, migrationCancel := context.WithTimeout(ctx, 1*time.Minute)
-	defer migrationCancel()
+	zl.Info("init migrator")
+	migrator := migration.New(provider)
 
-	zl.Info("up migrations")
-	if _, err := provider.Up(migrationCtx); err != nil {
-		return fmt.Errorf("goose: provider up: %w", err)
+	zl.Info("run migrations")
+	if err := migrator.Up(ctx); err != nil {
+		return fmt.Errorf("run migrations: %w", err)
 	}
 
 	zl.Info("init repository")
