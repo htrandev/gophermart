@@ -5,7 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"path"
+	"strconv"
+	"time"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/htrandev/gophermart/internal/domain"
@@ -60,7 +63,7 @@ func NewClient(opts *ClientOptions) *Client {
 	return &Client{opts: validateOptions(opts)}
 }
 
-func (c *Client) GetAccrual(ctx context.Context, number string) (domain.Accrual, error) {
+func (c *Client) GetAccrual(ctx context.Context, number string) (domain.ClientResponse, error) {
 	var accrual domain.Accrual
 
 	u := c.buildURL(number)
@@ -70,18 +73,44 @@ func (c *Client) GetAccrual(ctx context.Context, number string) (domain.Accrual,
 		Get(u)
 
 	if errors.Is(err, io.EOF) {
-		return domain.Accrual{}, nil
+		return domain.ClientResponse{}, nil
 	}
 	if err != nil {
-		return domain.Accrual{}, fmt.Errorf("get error: %w", err)
+		return domain.ClientResponse{}, fmt.Errorf("get error: %w", err)
 	}
 	if resp.IsError() {
-		return domain.Accrual{}, fmt.Errorf("response error: %v", resp.Error())
+		return domain.ClientResponse{}, fmt.Errorf("response error: %v", resp.Error())
 	}
 
-	return accrual, nil
+	if resp.StatusCode() == http.StatusNoContent {
+		return domain.ClientResponse{}, domain.ErrNotFound
+	}
+
+	if resp.StatusCode() == http.StatusTooManyRequests {
+		duration, _ := parseRetryAfter(resp.Header().Get("Retry-After"))
+		return domain.ClientResponse{RetryAfter: duration}, domain.ErrTooManyRequests
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return domain.ClientResponse{}, fmt.Errorf("get accural error with status code: %v", resp.StatusCode())
+	}
+
+	return domain.ClientResponse{
+		Accrual: accrual,
+	}, nil
 }
 
 func (c *Client) buildURL(number string) string {
 	return c.opts.Addr + "/" + path.Join("api", "orders", number)
+}
+
+func parseRetryAfter(h string) (time.Duration, error) {
+	if d, err := strconv.ParseInt(h, 10, 64); err == nil {
+		return time.Duration(d) * time.Second, nil
+	}
+	t, err := time.Parse(time.RFC1123, h)
+	if err != nil {
+		return 0, err
+	}
+	return time.Until(t), nil
 }

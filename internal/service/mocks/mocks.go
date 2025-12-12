@@ -140,48 +140,48 @@ func (mr *MockRepositoryMockRecorder) CreateOrder(ctx, order any) *gomock.Call {
 }
 
 // GetBalance mocks base method.
-func (m *MockRepository) GetBalance(ctx context.Context, userId uuid.UUID) (domain.Balance, error) {
+func (m *MockRepository) GetBalance(ctx context.Context, userID uuid.UUID) (domain.Balance, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBalance", ctx, userId)
+	ret := m.ctrl.Call(m, "GetBalance", ctx, userID)
 	ret0, _ := ret[0].(domain.Balance)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetBalance indicates an expected call of GetBalance.
-func (mr *MockRepositoryMockRecorder) GetBalance(ctx, userId any) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetBalance(ctx, userID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBalance", reflect.TypeOf((*MockRepository)(nil).GetBalance), ctx, userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBalance", reflect.TypeOf((*MockRepository)(nil).GetBalance), ctx, userID)
 }
 
 // GetOrders mocks base method.
-func (m *MockRepository) GetOrders(ctx context.Context, userId uuid.UUID) ([]domain.Order, error) {
+func (m *MockRepository) GetOrders(ctx context.Context, userID uuid.UUID) ([]domain.Order, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetOrders", ctx, userId)
+	ret := m.ctrl.Call(m, "GetOrders", ctx, userID)
 	ret0, _ := ret[0].([]domain.Order)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetOrders indicates an expected call of GetOrders.
-func (mr *MockRepositoryMockRecorder) GetOrders(ctx, userId any) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetOrders(ctx, userID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrders", reflect.TypeOf((*MockRepository)(nil).GetOrders), ctx, userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrders", reflect.TypeOf((*MockRepository)(nil).GetOrders), ctx, userID)
 }
 
 // GetWithdrawals mocks base method.
-func (m *MockRepository) GetWithdrawals(ctx context.Context, userId uuid.UUID) ([]domain.Withdraw, error) {
+func (m *MockRepository) GetWithdrawals(ctx context.Context, userID uuid.UUID) ([]domain.Withdraw, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetWithdrawals", ctx, userId)
+	ret := m.ctrl.Call(m, "GetWithdrawals", ctx, userID)
 	ret0, _ := ret[0].([]domain.Withdraw)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetWithdrawals indicates an expected call of GetWithdrawals.
-func (mr *MockRepositoryMockRecorder) GetWithdrawals(ctx, userId any) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetWithdrawals(ctx, userID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetWithdrawals", reflect.TypeOf((*MockRepository)(nil).GetWithdrawals), ctx, userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetWithdrawals", reflect.TypeOf((*MockRepository)(nil).GetWithdrawals), ctx, userID)
 }
 
 // Login mocks base method.
@@ -267,10 +267,10 @@ func (m *MockClient) EXPECT() *MockClientMockRecorder {
 }
 
 // GetAccrual mocks base method.
-func (m *MockClient) GetAccrual(ctx context.Context, number string) (domain.Accrual, error) {
+func (m *MockClient) GetAccrual(ctx context.Context, number string) (domain.ClientResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAccrual", ctx, number)
-	ret0, _ := ret[0].(domain.Accrual)
+	ret0, _ := ret[0].(domain.ClientResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -40,8 +41,10 @@ type Repository interface {
 //
 //go:generate mockgen -source=service.go -destination=mocks/mocks.go
 type Client interface {
-	GetAccrual(ctx context.Context, number string) (domain.Accrual, error)
+	GetAccrual(ctx context.Context, number string) (domain.ClientResponse, error)
 }
+
+const defaultPauseDuration = 5 * time.Second
 
 type ServiceOptions struct {
 	Authorizer Authorizer
@@ -60,6 +63,7 @@ func validateOptions(opts *ServiceOptions) *ServiceOptions {
 	if opts.Logger == nil {
 		opts.Logger = zap.NewNop()
 	}
+	opts.Logger.With(zap.String("scope", "service"))
 
 	return opts
 }
@@ -73,6 +77,9 @@ type Service struct {
 
 	ctx    context.Context
 	cancel context.CancelFunc
+
+	pauseUntil time.Time
+	pauseMu    sync.RWMutex
 }
 
 func New(opts *ServiceOptions) *Service {
@@ -94,9 +101,10 @@ func (s *Service) Close() {
 	if s.closed() {
 		return
 	}
-	s.wg.Wait()
-	close(s.termCh)
 	s.cancel()
+	close(s.queue)
+	close(s.termCh)
+	s.wg.Wait()
 }
 
 func (s *Service) closed() bool {
@@ -109,9 +117,9 @@ func (s *Service) closed() bool {
 }
 
 func (s *Service) Run(ctx context.Context) {
-	s.opts.Logger.Info("start workers", zap.String("scope", "service"))
+	s.opts.Logger.Info("start workers")
 
-	for range s.opts.NumWorkers {
+	for i := 0; i < s.opts.NumWorkers; i++ {
 		s.wg.Add(1)
 		go s.worker(ctx)
 	}
@@ -123,11 +131,13 @@ func (s *Service) worker(ctx context.Context) {
 		select {
 		case <-ctx.Done():
 			return
-		case order := <-s.queue:
+		case order, ok := <-s.queue:
+			if !ok {
+				return
+			}
 			order, err := s.processOrderAccrual(ctx, order)
 			if err != nil {
 				s.opts.Logger.Error("can't process order",
-					zap.String("scope", "service"),
 					zap.String("method", "processOrderAccrual"),
 					zap.Error(err),
 				)
@@ -151,7 +161,20 @@ func (s *Service) enqueue(order domain.Order) {
 		case <-s.termCh:
 			return
 		case s.queue <- order:
-		default:
 		}
 	}()
+}
+
+func (s *Service) pause(duration time.Duration) {
+	if duration <= 0 {
+		duration = defaultPauseDuration
+	}
+	s.pauseMu.Lock()
+	s.pauseUntil = time.Now().Add(duration)
+	s.pauseMu.Unlock()
+
+	s.opts.Logger.Warn("pause activated",
+		zap.Duration("duration", duration),
+		zap.Time("until", s.pauseUntil),
+	)
 }

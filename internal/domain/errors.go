@@ -12,6 +12,7 @@ var (
 	ErrOrderCreatedByAnotherUser = errors.New("order has been added by another user")
 	ErrNotFound                  = errors.New("not found")
 	ErrNotEnoughPoints           = errors.New("user doesn't have enough points")
+	ErrTooManyRequests           = errors.New("too many requests")
 )
 
 type InvalidOrderNumberError struct {

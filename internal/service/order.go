@@ -2,10 +2,11 @@ package service
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
-	"go.uber.org/zap"
 
 	"github.com/htrandev/gophermart/internal/domain"
 )
@@ -38,14 +39,30 @@ func (s *Service) updateOrder(ctx context.Context, order domain.Order) (domain.O
 }
 
 func (s *Service) processOrderAccrual(ctx context.Context, order domain.Order) (domain.Order, error) {
-	accrual, err := s.opts.Client.GetAccrual(ctx, order.Number)
+	// проверяем, можно ли делать запрос.
+	s.pauseMu.RLock()
+	if time.Now().Before(s.pauseUntil) {
+		s.pauseMu.RUnlock()
+		// если пауза все еще не закончилась, то возвращаем заказ в очередь.
+		return order, nil
+	}
+	s.pauseMu.RUnlock()
+
+	clientResponse, err := s.opts.Client.GetAccrual(ctx, order.Number)
 	if err != nil {
+		// заказ не зарегистрирован в системе расчёта.
+		if errors.Is(err, domain.ErrNotFound) {
+			return domain.Order{}, fmt.Errorf("order [%s] not found in accural system", order.Number)
+		}
+		// если слишком много запросов, то засыпаем.
+		if errors.Is(err, domain.ErrTooManyRequests) {
+			s.pause(clientResponse.RetryAfter)
+			return order, nil
+		}
 		return order, fmt.Errorf("get accrual from client: %w", err)
 	}
 
-	s.opts.Logger.Debug("get accrual", zap.Any("", accrual))
-
-	switch accrual.Status {
+	switch clientResponse.Accrual.Status {
 	case domain.AccrualStatusUnknown:
 		return order, nil
 	case domain.AccrualStatusInvalid:
@@ -59,7 +76,7 @@ func (s *Service) processOrderAccrual(ctx context.Context, order domain.Order) (
 		return order, nil
 	case domain.AccrualStatusProcessed:
 		order.Status = domain.OrderStatusProcessed
-		order.Accrual = float64(accrual.Accrual)
+		order.Accrual = float64(clientResponse.Accrual.Accrual)
 		return s.updateOrder(ctx, order)
 	}
 

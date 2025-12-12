@@ -139,7 +139,7 @@ func (s *OrderSuite) TestProcessOrder() {
 			Accrual: 10,
 		}
 
-		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(accrual, nil).Times(1)
+		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(domain.ClientResponse{Accrual: accrual}, nil).Times(1)
 		s.repository.EXPECT().UpdateOrder(gomock.Any(), domain.Order{
 			Number: "test",
 			UserID: id,
@@ -168,7 +168,7 @@ func (s *OrderSuite) TestProcessOrder() {
 			Accrual: 10,
 		}
 
-		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(accrual, nil).Times(1)
+		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(domain.ClientResponse{Accrual: accrual}, nil).Times(1)
 
 		o, err := s.service.processOrderAccrual(ctx, order)
 		s.Require().NoError(err)
@@ -191,7 +191,7 @@ func (s *OrderSuite) TestProcessOrder() {
 			Status: domain.AccrualStatusUnknown,
 		}
 
-		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(accrual, nil).Times(1)
+		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(domain.ClientResponse{Accrual: accrual}, nil).Times(1)
 
 		o, err := s.service.processOrderAccrual(ctx, order)
 		s.Require().NoError(err)
@@ -214,7 +214,7 @@ func (s *OrderSuite) TestProcessOrder() {
 			Status: domain.AccrualStatusInvalid,
 		}
 
-		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(accrual, nil).Times(1)
+		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(domain.ClientResponse{Accrual: accrual}, nil).Times(1)
 		s.repository.EXPECT().UpdateOrder(gomock.Any(), domain.Order{
 			Number: "test",
 			UserID: id,
@@ -242,7 +242,7 @@ func (s *OrderSuite) TestProcessOrder() {
 			Status: domain.AccrualStatusProcessed,
 		}
 
-		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(accrual, nil).Times(1)
+		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(domain.ClientResponse{Accrual: accrual}, nil).Times(1)
 		s.repository.EXPECT().UpdateOrder(gomock.Any(), domain.Order{
 			Number: "test",
 			UserID: id,
@@ -261,9 +261,46 @@ func (s *OrderSuite) TestProcessOrder() {
 			Status: domain.OrderStatusProcessing,
 		}
 
-		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(domain.Accrual{}, errTest).Times(1)
+		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(domain.ClientResponse{}, errTest).Times(1)
 
 		_, err := s.service.processOrderAccrual(ctx, order)
 		s.Require().ErrorIs(err, errTest)
+	})
+
+	s.Run("order not found in accural system", func() {
+		order := domain.Order{
+			Number: "test",
+			UserID: id,
+			Status: domain.OrderStatusProcessing,
+		}
+
+		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(domain.ClientResponse{}, domain.ErrNotFound).Times(1)
+
+		_, err := s.service.processOrderAccrual(ctx, order)
+		s.Require().Error(err)
+	})
+
+	s.Run("client too many requests", func() {
+		order := domain.Order{
+			Number: "test",
+			UserID: id,
+			Status: domain.OrderStatusProcessing,
+		}
+
+		s.client.EXPECT().GetAccrual(gomock.Any(), order.Number).Return(domain.ClientResponse{}, domain.ErrTooManyRequests).Times(1)
+
+		_, err := s.service.processOrderAccrual(ctx, order)
+		s.Require().ErrorIs(err, nil)
+	})
+
+	s.Run("pause active", func() {
+		order := domain.Order{
+			Number: "test",
+			UserID: id,
+			Status: domain.OrderStatusProcessing,
+		}
+
+		_, err := s.service.processOrderAccrual(ctx, order)
+		s.Require().ErrorIs(err, nil)
 	})
 }
